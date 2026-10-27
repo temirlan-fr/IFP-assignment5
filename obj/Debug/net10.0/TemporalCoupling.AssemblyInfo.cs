@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TemporalCoupling")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+df8f1279d1cfe46f939f87453f6a34b363e74df1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d526b9cc93c7155f743e5d8c528c941399f1ba65")]
 [assembly: System.Reflection.AssemblyProductAttribute("TemporalCoupling")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TemporalCoupling")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,13 +1,49 @@
 ﻿var draft = new Draft(1000m);
-
 var validated = Checkout.Validate(draft);
-
 var priced = Checkout.ApplyDiscount(validated, 0.10m);
 
-var receipt = Checkout.Charge(priced);
 
-Console.WriteLine($"Transaction ID: {receipt.TransactionId}");
-Console.WriteLine($"Charged: {receipt.Amount:F2}");
+// Real gateway
+Console.WriteLine("Real gateway:");
+
+var realReceipt = Checkout.Charge(
+    priced,
+    RealGateway);
+
+Console.WriteLine(
+    $"Transaction ID: {realReceipt.TransactionId}");
+
+Console.WriteLine(
+    $"Charged: {realReceipt.Amount:F2}");
+
+
+// Fake gateway
+Console.WriteLine();
+Console.WriteLine("Fake gateway:");
+
+var fakeGateway = new FakeGateway();
+
+var fakeReceipt = Checkout.Charge(
+    priced,
+    fakeGateway.Charge);
+
+Console.WriteLine(
+    $"Transaction ID: {fakeReceipt.TransactionId}");
+
+Console.WriteLine(
+    $"Charged: {fakeReceipt.Amount:F2}");
+
+Console.WriteLine(
+    $"Gateway calls: {fakeGateway.Calls}");
+
+
+static string RealGateway(decimal amount)
+{
+    Console.WriteLine(
+        $"Real gateway charged {amount:F2}");
+
+    return $"real-{Guid.NewGuid()}";
+}
 
 
 public sealed record Draft(decimal Amount);
@@ -40,17 +76,33 @@ public static class Checkout
         decimal discountPercent)
     {
         var discountedAmount =
-            validated.Amount - validated.Amount * discountPercent;
+            validated.Amount -
+            validated.Amount * discountPercent;
 
         return new Priced(discountedAmount);
     }
 
-    public static Receipt Charge(Priced priced)
+    public static Receipt Charge(
+        Priced priced,
+        Func<decimal, string> gateway)
     {
-        var transactionId = Guid.NewGuid().ToString();
+        var transactionId = gateway(priced.Amount);
 
         return new Receipt(
             transactionId,
             priced.Amount);
+    }
+}
+
+
+public sealed class FakeGateway
+{
+    public int Calls { get; private set; }
+
+    public string Charge(decimal amount)
+    {
+        Calls++;
+
+        return $"fake-transaction-{Calls}";
     }
 }

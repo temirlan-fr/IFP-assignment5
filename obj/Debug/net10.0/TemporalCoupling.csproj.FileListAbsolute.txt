@@ -1,0 +1,15 @@
+C:\Users\user\Desktop\IFP-assignment5\TemporalCoupling\bin\Debug\net10.0\TemporalCoupling.exe
+C:\Users\user\Desktop\IFP-assignment5\TemporalCoupling\bin\Debug\net10.0\TemporalCoupling.deps.json
+C:\Users\user\Desktop\IFP-assignment5\TemporalCoupling\bin\Debug\net10.0\TemporalCoupling.runtimeconfig.json
+C:\Users\user\Desktop\IFP-assignment5\TemporalCoupling\bin\Debug\net10.0\TemporalCoupling.dll
+C:\Users\user\Desktop\IFP-assignment5\TemporalCoupling\bin\Debug\net10.0\TemporalCoupling.pdb
+C:\Users\user\Desktop\IFP-assignment5\TemporalCoupling\obj\Debug\net10.0\TemporalCoupling.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\Desktop\IFP-assignment5\TemporalCoupling\obj\Debug\net10.0\TemporalCoupling.AssemblyInfoInputs.cache
+C:\Users\user\Desktop\IFP-assignment5\TemporalCoupling\obj\Debug\net10.0\TemporalCoupling.AssemblyInfo.cs
+C:\Users\user\Desktop\IFP-assignment5\TemporalCoupling\obj\Debug\net10.0\TemporalCoupling.csproj.CoreCompileInputs.cache
+C:\Users\user\Desktop\IFP-assignment5\TemporalCoupling\obj\Debug\net10.0\TemporalCoupling.sourcelink.json
+C:\Users\user\Desktop\IFP-assignment5\TemporalCoupling\obj\Debug\net10.0\TemporalCoupling.dll
+C:\Users\user\Desktop\IFP-assignment5\TemporalCoupling\obj\Debug\net10.0\refint\TemporalCoupling.dll
+C:\Users\user\Desktop\IFP-assignment5\TemporalCoupling\obj\Debug\net10.0\TemporalCoupling.pdb
+C:\Users\user\Desktop\IFP-assignment5\TemporalCoupling\obj\Debug\net10.0\TemporalCoupling.genruntimeconfig.cache
+C:\Users\user\Desktop\IFP-assignment5\TemporalCoupling\obj\Debug\net10.0\ref\TemporalCoupling.dll

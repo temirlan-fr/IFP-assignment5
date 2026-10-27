@@ -2,47 +2,65 @@
 var validated = Checkout.Validate(draft);
 var priced = Checkout.ApplyDiscount(validated, 0.10m);
 
-
-// Real gateway
-Console.WriteLine("Real gateway:");
-
-var realReceipt = Checkout.Charge(
+var receipt = Checkout.Charge(
     priced,
     RealGateway);
 
-Console.WriteLine(
-    $"Transaction ID: {realReceipt.TransactionId}");
-
-Console.WriteLine(
-    $"Charged: {realReceipt.Amount:F2}");
+Console.WriteLine($"Transaction ID: {receipt.TransactionId}");
+Console.WriteLine($"Charged: {receipt.Amount:F2}");
 
 
-// Fake gateway
-Console.WriteLine();
-Console.WriteLine("Fake gateway:");
+// Task 1 wrong sequence 1:
+// Discount applied twice.
+//
+// var pricedAgain = Checkout.ApplyDiscount(priced, 0.10m);
+//
+// Compiler error:
+// CS1503: cannot convert from 'Priced' to 'Validated'.
+// The second discount is rejected by the compiler.
 
-var fakeGateway = new FakeGateway();
 
-var fakeReceipt = Checkout.Charge(
-    priced,
-    fakeGateway.Charge);
+// Task 1 wrong sequence 2:
+// Discount forgotten.
+//
+// var invalidReceipt = Checkout.Charge(
+//     validated,
+//     RealGateway);
+//
+// Compiler error:
+// CS1503: cannot convert from 'Validated' to 'Priced'.
+// Charge requires a Priced value.
 
-Console.WriteLine(
-    $"Transaction ID: {fakeReceipt.TransactionId}");
 
-Console.WriteLine(
-    $"Charged: {fakeReceipt.Amount:F2}");
+// Task 1 wrong sequence 3:
+// Charge called twice.
+//
+// var chargedAgain = Checkout.Charge(
+//     receipt,
+//     RealGateway);
+//
+// Compiler error:
+// CS1503: cannot convert from 'Receipt' to 'Priced'.
+// A Receipt cannot be charged again.
 
-Console.WriteLine(
-    $"Gateway calls: {fakeGateway.Calls}");
+
+// Task 1 wrong sequence 4:
+// Charge before Validate.
+//
+// var invalidReceipt = Checkout.Charge(
+//     draft,
+//     RealGateway);
+//
+// Compiler error:
+// CS1503: cannot convert from 'Draft' to 'Priced'.
+// Draft must first pass through Validate and ApplyDiscount.
 
 
 static string RealGateway(decimal amount)
 {
-    Console.WriteLine(
-        $"Real gateway charged {amount:F2}");
+    Console.WriteLine($"Gateway charged {amount:F2}");
 
-    return $"real-{Guid.NewGuid()}";
+    return $"transaction-{Guid.NewGuid()}";
 }
 
 
@@ -91,18 +109,5 @@ public static class Checkout
         return new Receipt(
             transactionId,
             priced.Amount);
-    }
-}
-
-
-public sealed class FakeGateway
-{
-    public int Calls { get; private set; }
-
-    public string Charge(decimal amount)
-    {
-        Calls++;
-
-        return $"fake-transaction-{Calls}";
     }
 }

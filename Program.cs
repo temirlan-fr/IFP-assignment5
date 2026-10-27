@@ -1,80 +1,56 @@
-﻿Console.WriteLine("1. Discount applied twice");
+﻿var draft = new Draft(1000m);
 
-var discountTwice = new Checkout();
+var validated = Checkout.Validate(draft);
 
-discountTwice.Start(1000m);
-discountTwice.Validate();
-discountTwice.ApplyDiscount(0.10m);
-discountTwice.ApplyDiscount(0.10m);
-discountTwice.Charge();
+var priced = Checkout.ApplyDiscount(validated, 0.10m);
 
+var receipt = Checkout.Charge(priced);
 
-Console.WriteLine();
-Console.WriteLine("2. Discount forgotten");
-
-var discountForgotten = new Checkout();
-
-discountForgotten.Start(1000m);
-discountForgotten.Validate();
-discountForgotten.Charge();
+Console.WriteLine($"Transaction ID: {receipt.TransactionId}");
+Console.WriteLine($"Charged: {receipt.Amount:F2}");
 
 
-Console.WriteLine();
-Console.WriteLine("3. Charge called twice");
+public sealed record Draft(decimal Amount);
 
-var chargedTwice = new Checkout();
+public sealed record Validated(decimal Amount);
 
-chargedTwice.Start(1000m);
-chargedTwice.Validate();
-chargedTwice.ApplyDiscount(0.10m);
-chargedTwice.Charge();
-chargedTwice.Charge();
+public sealed record Priced(decimal Amount);
+
+public sealed record Receipt(
+    string TransactionId,
+    decimal Amount
+);
 
 
-Console.WriteLine();
-Console.WriteLine("4. Charge before Validate");
-
-var notValidated = new Checkout();
-
-notValidated.Start(1000m);
-
-try
+public static class Checkout
 {
-    notValidated.Charge();
-}
-catch (InvalidOperationException exception)
-{
-    Console.WriteLine($"Runtime error: {exception.Message}");
-}
-
-
-public class Checkout
-{
-    private decimal _total;
-    private bool _validated;
-
-    public void Start(decimal amount)
+    public static Validated Validate(Draft draft)
     {
-        _total = amount;
-    }
-
-    public void Validate()
-    {
-        _validated = _total > 0;
-    }
-
-    public void ApplyDiscount(decimal percent)
-    {
-        _total -= _total * percent;
-    }
-
-    public void Charge()
-    {
-        if (!_validated)
+        if (draft.Amount <= 0)
         {
-            throw new InvalidOperationException("Not validated.");
+            throw new InvalidOperationException(
+                "Amount must be greater than zero.");
         }
 
-        Console.WriteLine($"Charged {_total:F2}");
+        return new Validated(draft.Amount);
+    }
+
+    public static Priced ApplyDiscount(
+        Validated validated,
+        decimal discountPercent)
+    {
+        var discountedAmount =
+            validated.Amount - validated.Amount * discountPercent;
+
+        return new Priced(discountedAmount);
+    }
+
+    public static Receipt Charge(Priced priced)
+    {
+        var transactionId = Guid.NewGuid().ToString();
+
+        return new Receipt(
+            transactionId,
+            priced.Amount);
     }
 }
